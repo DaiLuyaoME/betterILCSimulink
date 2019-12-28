@@ -30,7 +30,7 @@ forwardOrder = numel(zero(compensationPart)) - numel(pole(compensationPart));
         alpha1 = sum( nonminimumZero./(1 - nonminimumZero).^2 );
         z = tf('z',Ts);
         F = z * ((1-z^-1)/Ts)^2;
-        coef = alpha1 * Ts;
+        coef = alpha1 * Ts * Ts;
         
         %
         %

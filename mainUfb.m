@@ -1,4 +1,4 @@
-
+close all;
 %%
 fn = 1000;
 wn = fn * 2 * pi;
@@ -22,7 +22,7 @@ Sp = feedback(GpDis*GcDis,1);
 figure;pzmap(Sp);
 figure;bodeplot(Sp);
 %%
-method = 'zmetc';
+method = 'zpetc';
 [inverseSp,forwardOrder] = modelBasedFeedforward(Sp,method);
 [delta,~,alpha] = extraCompensation(Sp,method);
 % inverseSp = inverseSp * lpDis;
@@ -48,7 +48,7 @@ figure;bodeplot(1/Sp,inverseSp,inverseSp*(1+delta*alpha),Op);
 %% 预处理反馈控制信号
 ufbSignal = ufb.signals.values;
 figure;plot(ufbSignal);
-fbFilter = designfilt('lowpassiir', 'FilterOrder', 4, 'PassbandFrequency', 100, 'PassbandRipple', 0.01, 'SampleRate', 5000);
+fbFilter = designfilt('lowpassiir', 'FilterOrder', 4, 'PassbandFrequency', 2500, 'PassbandRipple', 0.01, 'SampleRate', 5000);
 filterdUfb = filtfilt(fbFilter,ufbSignal);
 figure;plot([ufbSignal,filterdUfb]);
 %% 生成迭代学习信号

@@ -9,7 +9,7 @@ Ts = 1/fs;
 Gp = createPlantModel(modelInfo);
 
 %% delay factor
-delayCount = 1.3;
+delayCount = 2.5;
 s = tf('s');
 delayModel = exp(-delayCount*Ts*s);
 delayModel = pade(delayModel,2);
@@ -17,6 +17,8 @@ delayModel = pade(delayModel,2);
 %% generate plant model with delay
 GpWithDelay = Gp * delayModel;
 GpDis = c2d(GpWithDelay,Ts,'zoh');
+figure;pzmap(GpDis);
+
 
 
 %% ideal feedforward coefficients 
@@ -31,4 +33,4 @@ noisePower=varNoise*Ts;
 %%
 A1 = 8;
 A2 = 5;
-A3 = 0;
+A3 = 10;
