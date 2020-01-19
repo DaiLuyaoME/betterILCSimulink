@@ -33,4 +33,4 @@ noisePower=varNoise*Ts;
 %%
 A1 = 8;
 A2 = 5;
-A3 = 10;
+A3 = 3;

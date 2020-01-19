@@ -15,18 +15,19 @@ Op.xlim={[f_start  f_end]};
 Op.PhaseVisible = 'on';
 Op.Grid='on';
 Op.PhaseMatching='on';
-Op.PhaseMatchingFreq=100;
-Op.PhaseMatchingValue=-180;
+Op.PhaseMatchingFreq=10;
+Op.PhaseMatchingValue=0;
 %%
 Sp = feedback(GpDis*GcDis,1);
 figure;pzmap(Sp);
 figure;bodeplot(Sp);
 %%
-method = 'zpetc';
+method = 'ignore';
+compensationOrder = 2;
 [inverseSp,forwardOrder] = modelBasedFeedforward(Sp,method);
-[delta,~,alpha] = extraCompensation(Sp,method);
+[delta,~] = extraCompensation(Sp,method,compensationOrder);
 % inverseSp = inverseSp * lpDis;
-figure;bodeplot(1/Sp,inverseSp,inverseSp*(1+delta*alpha),Op);
+figure;bodeplot(1/Sp,inverseSp,inverseSp*(1+delta),Op);
 %%
 % wout = logspace(0,3,10000);
 % [mag1,phase1,wout] = bode(inverseSp,wout);
@@ -55,7 +56,7 @@ figure;plot([ufbSignal,filterdUfb]);
 ilcSignal = noncausalFiltering(filterdUfb-filterdUfb(1),inverseSp);
 figure;plot(ilcSignal);
 % ilcSignalRevised = ilcSignal + noncausalFiltering(filterdUfb-filterdUfb(1),inverseSp * delta * alpha);
-ilcSignalRevised =  ilcSignal + noncausalFiltering(ilcSignal,minreal(delta * alpha));
+ilcSignalRevised =  ilcSignal + noncausalFiltering(ilcSignal,minreal(delta));
 % ilcSignalRevised =  ilcSignal(1:end-2) + diff(diff(ilcSignal)) * alpha * 5000;
 figure;plot([ilcSignal,ilcSignalRevised]);
 filteredILCsignal = filtfilt(fbFilter,ilcSignal);
